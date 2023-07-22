@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "./Navbar";
-import { styled } from "styled-components";
+import styled from "styled-components";
 
 const Section1 = styled.div`
   height: 100vh;
