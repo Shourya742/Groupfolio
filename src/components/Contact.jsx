@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
 import { styled } from "styled-components";
 import Map from "./Map";
 
@@ -54,21 +55,44 @@ const Right = styled.div`
   flex: 1;
 `;
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-};
-
 const Contact = () => {
+  const form = useRef();
+  const [success, setSuccess] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const result = await emailjs.sendForm(
+        "service_rjgacce",
+        "template_3nwv3qe",
+        form.current,
+        "mkk8-e9LDDPoXEqxE"
+      );
+
+      console.log(result.text);
+      setSuccess(true);
+    } catch (error) {
+      console.log("Why god");
+      console.log(error);
+      setSuccess(false);
+    }
+  };
   return (
     <Section>
       <Container>
         <Left>
-          <Form onSubmit={handleSubmit}>
+          <Form ref={form} onSubmit={handleSubmit}>
             <Title>Contact Us</Title>
-            <Input placeholder="Name" />
-            <Input placeholder="Email" />
-            <TextArea placeholder="Write your message" rows={10} />
+            <Input placeholder="Name" name="name" />
+            <Input placeholder="Email" name="email" />
+            <TextArea
+              placeholder="Write your message"
+              name="message"
+              rows={10}
+            />
             <Button type="submit">Send</Button>
+            {success &&
+              "Your Message has been sent. We'll get back to you soon :)"}
           </Form>
         </Left>
         <Right>
